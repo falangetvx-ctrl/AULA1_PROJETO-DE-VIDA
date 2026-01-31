@@ -1,0 +1,1372 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Projeto de Vida — Identidade Pessoal e Social (Interativo)</title>
+
+<style>
+/* =========================================================
+   ✅ PADRÃO FALANGE (baseado no seu modelo Aula 4/5)
+   - A4 LANDSCAPE: 297mm x 280mm
+   - Registro do aluno → páginas escondidas → certificado
+   - 2 colunas, cards, botões, validação, narrador
+========================================================= */
+
+/* =========================================================
+   0) VARIÁVEIS (padrão Falange)
+========================================================= */
+:root{
+  --paper:#f3f4df;
+  --blue:#3aa0e6;
+  --violet:#9b59b6;
+  --red:#d94b3a;
+  --green:#2ecc71;
+}
+
+*{ box-sizing:border-box; }
+
+/* =========================================================
+   1) BODY / CENTRALIZAÇÃO (padrão das suas apostilas)
+========================================================= */
+body{
+  margin:0;
+  background:#e5e7eb;
+  font-family: Arial, Helvetica, sans-serif;
+  padding:10px;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+
+  overflow-x:auto;
+  overflow-y:auto;
+}
+
+/* =========================================================
+   2) WRAP (container das páginas)
+   - começa escondido até salvar registro
+========================================================= */
+.wrap{
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  padding-bottom:18px;
+}
+
+/* =========================================================
+   3) PÁGINA (LANDSCAPE — mantém seu padrão 297mm x 280mm)
+========================================================= */
+.page{
+  width:297mm;
+  height:320mm;
+  background: var(--paper);
+  position:relative;
+  overflow:hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+  display:block;
+  margin: 0 auto;
+}
+
+/* =========================================================
+   4) ÁREA ÚTIL (margens internas)
+========================================================= */
+.content{
+  position:absolute;
+  left:18mm;
+  right:18mm;
+  top:16mm;
+  bottom:18mm;
+}
+
+/* =========================================================
+   5) FUNDO (opcional) — NÃO empurra layout
+   - Se quiser, coloque uma imagem na pasta e troque o nome
+========================================================= */
+.content::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  /* troque se quiser: background: url("fundo-projeto-vida.png") center center no-repeat; */
+  background: transparent;
+  background-size: cover;
+  opacity: 0.10;
+  z-index:0;
+  pointer-events:none;
+}
+.content > *{ position:relative; z-index:1; }
+
+/* =========================================================
+   6) CABEÇALHO (padrão)
+========================================================= */
+.titleRow{
+  margin-top:6px;
+  display:grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items:center;
+  column-gap:10px;
+}
+.bncc{
+  font-weight:700;
+  font-size:10pt;
+  color:#000;
+  text-align:right;
+}
+.centerTitle{
+  color: var(--violet);
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:0.8px;
+  font-size:11pt;
+  text-align:center;
+}
+.bars{
+  margin-top:5px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+}
+.bar{
+  height:7px;
+  background: var(--blue);
+  border-radius:2px;
+}
+
+/* =========================================================
+   7) COLUNAS / CARDS (padrão)
+========================================================= */
+.cols{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:10px;
+}
+.card{
+  background:#fff;
+  border:2px dotted var(--violet);
+  border-radius:12px;
+  padding:10px;
+}
+.cardTitle{
+  font-weight:900;
+  text-align:center;
+  font-size:10.5pt;
+  margin-bottom:8px;
+  color:#4a148c;
+  letter-spacing:.2px;
+}
+.hint{
+  font-size:9.2pt;
+  line-height:1.25;
+  color:#111;
+  text-align:center;
+}
+.actText{
+  font-size:9.2pt;
+  line-height:1.25;
+  text-align:justify;
+  margin:0;
+}
+
+/* =========================================================
+   8) BOTÕES/CONTROLES (padrão)
+========================================================= */
+.controls{
+  margin-top:8px;
+  display:flex;
+  gap:8px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.ctrlBtn{
+  border:2px solid rgba(0,0,0,.55);
+  background:#fff;
+  border-radius:999px;
+  padding:6px 10px;
+  font-weight:900;
+  font-size:9pt;
+  cursor:pointer;
+}
+.ctrlBtnPrimary{
+  background: var(--blue);
+  color:#fff;
+  border-color: transparent;
+}
+.ctrlBtnDanger{
+  background:#fff;
+  border-color: rgba(217,75,58,.65);
+}
+
+/* =========================================================
+   9) INPUTS / VALIDAÇÃO (padrão)
+========================================================= */
+.answers{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns: 1fr;
+  gap:8px;
+}
+.ansRow{
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  gap:8px;
+  align-items:center;
+}
+.tag{
+  background: rgba(58,160,230,.12);
+  border:2px solid rgba(0,0,0,.25);
+  border-radius:999px;
+  padding:3px 10px;
+  font-size:9pt;
+  font-weight:900;
+  white-space:nowrap;
+  cursor:pointer;
+}
+.answerInput{
+  height:30px;
+  padding:0 10px;
+  border:2px solid rgba(0,0,0,.35);
+  border-radius:10px;
+  font-weight:900;
+  outline:none;
+  width:100%;
+}
+.answerBtn{
+  height:30px;
+  padding:0 14px;
+  border:2px solid rgba(0,0,0,.45);
+  border-radius:999px;
+  font-weight:900;
+  cursor:pointer;
+  background:#fff;
+}
+.answerMsg{
+  margin-top:3px;
+  font-size:9pt;
+  font-weight:900;
+  text-align:left;
+  padding-left:2px;
+}
+.is-wrong .answerInput{ border-color:var(--red); color:var(--red); }
+.is-right .answerInput{ border-color:var(--blue); color:var(--blue); background: rgba(58,160,230,.08); }
+.is-right .answerBtn{ opacity:.55; pointer-events:none; }
+
+/* =========================================================
+   10) CHIPS (para marcar sem vergonha)
+========================================================= */
+.chips{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin-top:8px;
+}
+.chipBtn{
+  border:2px solid rgba(0,0,0,.35);
+  background:#fff;
+  border-radius:999px;
+  padding:7px 10px;
+  font-weight:900;
+  font-size:9.5pt;
+  cursor:pointer;
+  user-select:none;
+}
+.chipBtn.active{
+  outline: 3px solid rgba(58,160,230,.45);
+  background: rgba(58,160,230,.08);
+}
+
+/* =========================================================
+   11) BINGO DISCRETO (clique para marcar)
+========================================================= */
+.bingo{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap:6px;
+}
+.bCell{
+  border:2px solid rgba(0,0,0,.35);
+  border-radius:12px;
+  padding:8px;
+  min-height:44px;
+  font-size:9.2pt;
+  font-weight:900;
+  background:#fff;
+  cursor:pointer;
+  user-select:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.bCell.marked{
+  border-color: rgba(46,204,113,.95);
+  background: rgba(46,204,113,.10);
+}
+
+/* =========================================================
+   12) WORD BANK (sopa “leve”: o aluno seleciona palavras encontradas)
+   - Mantém a lógica da atividade: achar palavras e marcar 2
+========================================================= */
+.wordBank{
+  margin-top:8px;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+.wbItem{
+  border:2px solid rgba(0,0,0,.35);
+  border-radius:999px;
+  padding:6px 12px;
+  background:#fff;
+  font-weight:900;
+  cursor:pointer;
+  user-select:none;
+}
+.wbItem.active{
+  outline: 3px solid rgba(58,160,230,.45);
+  background: rgba(58,160,230,.10);
+}
+.pickRow{
+  margin-top:8px;
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap:8px;
+}
+.pickBox{
+  border:2px dashed rgba(0,0,0,.25);
+  border-radius:12px;
+  padding:10px;
+  background: rgba(58,160,230,.06);
+  text-align:center;
+  font-weight:900;
+}
+.pickBox span{
+  display:inline-block;
+  padding:5px 10px;
+  border-radius:999px;
+  background:#fff;
+  border:2px solid rgba(0,0,0,.25);
+}
+
+/* =========================================================
+   13) CHECKLIST (grupos sociais)
+========================================================= */
+.checklist{
+  margin-top:8px;
+  display:grid;
+  gap:8px;
+}
+.checkRow{
+  display:grid;
+  grid-template-columns: 22px 1fr;
+  gap:8px;
+  align-items:flex-start;
+  font-size:9.6pt;
+  font-weight:900;
+}
+.boxCheck{
+  width:18px;
+  height:18px;
+  border:2px solid rgba(0,0,0,.45);
+  border-radius:4px;
+  margin-top:1px;
+  cursor:pointer;
+}
+.boxCheck.checked{
+  background: rgba(46,204,113,.25);
+  border-color: rgba(46,204,113,.85);
+}
+
+/* =========================================================
+   14) OVERLAY CENTRAL (pega as 2 colunas)
+   - Para explicações + narrador (igual modelo do seu overlay)
+========================================================= */
+#infoOverlay{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.58);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index: 9998;
+  padding:18px;
+}
+#infoCard{
+  width: min(1100px, 96vw);
+  background: var(--paper);
+  border: 6px solid var(--violet);
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.38);
+  padding: 14px;
+}
+#infoInner{
+  background:#fff;
+  border: 3px dotted var(--blue);
+  border-radius: 14px;
+  padding: 16px;
+  text-align:center;
+}
+#infoTitle{
+  font-weight:900;
+  font-size: 14pt;
+  color: var(--violet);
+  text-transform: uppercase;
+  letter-spacing:.6px;
+  margin: 0 0 10px 0;
+}
+#infoText{
+  font-weight:900;
+  font-size: 11pt;
+  color:#111;
+  margin: 0 0 12px 0;
+  line-height:1.35;
+}
+#infoBtns{
+  margin-top: 10px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.overlayBtn{
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,.45);
+  background:#fff;
+  font-weight: 900;
+  cursor:pointer;
+}
+.overlayBtnPrimary{
+  background: var(--blue);
+  color:#fff;
+  border-color: transparent;
+}
+
+/* =========================================================
+   15) REGISTRO DO ALUNO + CERTIFICADO (padrão)
+========================================================= */
+#studentRegister{
+  width: min(520px, calc(100vw - 24px));
+  margin: 14px auto 10px auto;
+  background:#fff;
+  border:3px solid var(--blue);
+  border-radius:14px;
+  padding:14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18);
+}
+#studentRegister .regTitle{
+  font-weight:900;
+  text-align:center;
+  color: var(--violet);
+  letter-spacing:.4px;
+  margin-bottom:10px;
+}
+#studentRegister .regRow{
+  display:grid;
+  grid-template-columns: 92px 1fr;
+  gap:8px;
+  align-items:center;
+  margin-bottom:8px;
+}
+#studentRegister .regLabel{
+  font-weight:900;
+  font-size:9.5pt;
+  color:#111;
+  text-align:right;
+}
+#studentRegister .regInput{
+  height:34px;
+  padding:0 10px;
+  border:2px solid rgba(0,0,0,.35);
+  border-radius:10px;
+  font-weight:900;
+  outline:none;
+}
+#studentRegister .regBtn{
+  width:100%;
+  height:38px;
+  border:none;
+  border-radius:12px;
+  font-weight:900;
+  cursor:pointer;
+  background: var(--blue);
+  color:#fff;
+  letter-spacing:.4px;
+}
+#studentRegister .regHint{
+  margin-top:8px;
+  font-size:9pt;
+  text-align:center;
+  color:#111;
+}
+
+/* certificado */
+#certOverlay{
+  position:fixed;
+  inset:0;
+  background: rgba(0,0,0,.55);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index: 9999;
+  padding: 18px;
+}
+#certCard{
+  width: min(820px, 100%);
+  background: var(--paper);
+  border: 6px solid var(--blue);
+  border-radius: 18px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.35);
+  padding: 18px;
+}
+#certInner{
+  background:#fff;
+  border: 3px dotted var(--violet);
+  border-radius: 14px;
+  padding: 18px 18px 14px 18px;
+  text-align:center;
+}
+#certTitle{
+  font-weight:900;
+  color: var(--violet);
+  letter-spacing: .8px;
+  text-transform: uppercase;
+  font-size: 16pt;
+  margin: 2px 0 8px 0;
+}
+#certSub{
+  font-weight:900;
+  color:#111;
+  margin: 0 0 10px 0;
+}
+#certName{
+  font-weight:900;
+  font-size: 16pt;
+  color:#111;
+  margin: 4px 0 10px 0;
+}
+#certMeta{
+  font-size: 11pt;
+  color:#111;
+  line-height:1.35;
+}
+#certBtns{
+  margin-top: 14px;
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  flex-wrap:wrap;
+}
+.certBtn{
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 999px;
+  border: 2px solid rgba(0,0,0,.45);
+  background:#fff;
+  font-weight:900;
+  cursor:pointer;
+}
+.certBtnPrimary{
+  background: var(--blue);
+  color:#fff;
+  border-color: transparent;
+}
+
+/* =========================================================
+   16) BARRA DE PROGRESSO (visual simples)
+========================================================= */
+.progressBox{
+  margin-top:8px;
+  border:2px dashed rgba(0,0,0,.25);
+  border-radius:12px;
+  padding:10px;
+  background: rgba(58,160,230,.06);
+}
+.progressTop{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+  font-weight:900;
+  font-size:9.2pt;
+}
+.progressBar{
+  margin-top:8px;
+  height:12px;
+  border-radius:999px;
+  border:2px solid rgba(0,0,0,.25);
+  overflow:hidden;
+  background:#fff;
+}
+.progressFill{
+  height:100%;
+  width:0%;
+  background: var(--blue);
+}
+.progressHint{
+  margin-top:6px;
+  font-size:9pt;
+  font-weight:900;
+  text-align:center;
+}
+
+/* =========================================================
+   17) IMPRESSÃO: só o certificado (padrão)
+========================================================= */
+@media print{
+  *{ -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  body *{ visibility: hidden !important; }
+
+  #certOverlay, #certOverlay *{ visibility: visible !important; }
+
+  #certOverlay{
+    position:absolute !important;
+    inset:0 !important;
+    background:#fff !important;
+    display:block !important;
+    padding:0 !important;
+  }
+  #certCard{
+    box-shadow:none !important;
+    border:0 !important;
+    margin:0 auto !important;
+  }
+  @page{ size:A4 landscape; margin:0; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     ✅ 0) REGISTRO DO ALUNO (ANTES DE TUDO)
+===================================================== -->
+<div id="studentRegister" aria-label="Registro do aluno">
+  <div class="regTitle">REGISTRO DO ALUNO</div>
+
+  <div class="regRow">
+    <div class="regLabel">NOME:</div>
+    <input id="studentName" class="regInput" autocomplete="off" placeholder="Digite o nome do aluno">
+  </div>
+
+  <div class="regRow">
+    <div class="regLabel">TURMA:</div>
+    <input id="studentClass" class="regInput" autocomplete="off" placeholder="Ex.: 2ª Série A">
+  </div>
+
+  <div class="regRow">
+    <div class="regLabel">ESCOLA:</div>
+    <input id="studentSchool" class="regInput" autocomplete="off" placeholder="Nome da escola">
+  </div>
+
+  <button class="regBtn" type="button" onclick="saveStudent()">INICIAR ATIVIDADES</button>
+  <div class="regHint">Preencha os dados e clique em <b>INICIAR</b>.</div>
+</div>
+
+<!-- =====================================================
+     ✅ CERTIFICADO (aparece automaticamente ao concluir tudo)
+===================================================== -->
+<div id="certOverlay" aria-label="Certificado de conclusão">
+  <div id="certCard">
+    <div id="certInner">
+      <div id="certTitle">Certificado de Conclusão</div>
+      <div id="certSub">Projeto de Vida — Identidade Pessoal e Social</div>
+
+      <div style="margin-top:10px; font-size:11pt; color:#111;">
+        Certificamos que
+      </div>
+      <div id="certName">—</div>
+
+      <div id="certMeta">
+        Turma: <b id="certTurma">—</b><br>
+        Escola: <b id="certEscola">—</b><br><br>
+        Concluiu todas as atividades interativas desta aula.<br><br>
+        Data: <b id="certData">—</b> • Hora: <b id="certHora">—</b>
+      </div>
+
+      <div id="certBtns">
+        <button class="certBtn" type="button" onclick="closeCertificate()">FECHAR</button>
+        <button class="certBtn certBtnPrimary" type="button" onclick="window.print()">IMPRIMIR</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     ✅ OVERLAY CENTRAL (explicação / narrador)
+===================================================== -->
+<div id="infoOverlay" aria-label="Janela de explicação">
+  <div id="infoCard">
+    <div id="infoInner">
+      <div id="infoTitle">—</div>
+      <div id="infoText">—</div>
+      <div id="infoBtns">
+        <button class="overlayBtn" type="button" onclick="repeatOverlay()">REPETIR 🔊</button>
+        <button class="overlayBtn overlayBtnPrimary" type="button" onclick="closeOverlay()">VOLTAR</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- =====================================================
+     ✅ WRAP — PÁGINAS (só aparece após registro)
+===================================================== -->
+<div class="wrap" id="wrap">
+
+  <!-- =====================================================
+       ✅ PÁGINA 1 — Identidade pessoal e social (2 colunas)
+       - Mantém as mesmas atividades (só ficou respondível + interativo)
+  ===================================================== -->
+  <section class="page" aria-label="Projeto de Vida — Identidade pessoal e social">
+    <div class="content">
+
+      <!-- Cabeçalho -->
+      <div class="titleRow">
+        <div class="bncc" style="padding-right:26mm;">2ª SÉRIE • EM</div>
+        <div class="centerTitle">PROJETO DE VIDA — IDENTIDADE</div>
+        <div class="bncc">BNCC: (ajuste aqui)</div>
+      </div>
+      <div class="bars">
+        <div class="bar"></div><div style="width:12px;"></div><div class="bar"></div>
+      </div>
+
+      <!-- PROGRESSO (topo) -->
+      <div class="progressBox" aria-label="Progresso do aluno">
+        <div class="progressTop">
+          <div>✅ Progresso: <span id="progTxt">0/5</span></div>
+          <div>
+            <button class="ctrlBtn" type="button" onclick="openInfo('O que é identidade?', getIdentityText(), true)">
+              O QUE É? 🔊
+            </button>
+            <button class="ctrlBtn ctrlBtnDanger" type="button" onclick="stopVoice()">PARAR 🔇</button>
+          </div>
+        </div>
+        <div class="progressBar"><div class="progressFill" id="progFill"></div></div>
+        <div class="progressHint" id="progHint">Complete as atividades para receber o certificado.</div>
+      </div>
+
+      <div class="cols">
+
+        <!-- =====================================================
+             COLUNA ESQUERDA — ATIVIDADES 1,2,3 (lúdicas e discretas)
+        ====================================================== -->
+        <div class="card">
+          <div class="cardTitle">1) — “HOJE EU TÔ…”</div>
+          <p class="actText">
+            Marque <b>até 2</b> opções. Você não precisa explicar para ninguém.
+          </p>
+
+          <!-- ===== CHIPS (interativo) ===== -->
+          <div class="chips" aria-label="Escolha de estado">
+            <button class="chipBtn" type="button" onclick="toggleMood(this,'tranquilo')">🙂 tranquilo(a)</button>
+            <button class="chipBtn" type="button" onclick="toggleMood(this,'normal')">😐 normal</button>
+            <button class="chipBtn" type="button" onclick="toggleMood(this,'cansado')">😴 cansado(a)</button>
+            <button class="chipBtn" type="button" onclick="toggleMood(this,'pensativo')">🤔 pensativo(a)</button>
+            <button class="chipBtn" type="button" onclick="toggleMood(this,'ansioso')">😅 ansioso(a)</button>
+            <button class="chipBtn" type="button" onclick="toggleMood(this,'deboa')">😎 de boa</button>
+          </div>
+
+          <div class="controls">
+            <button class="ctrlBtn" type="button" onclick="speakPT('Escolha até duas opções. Ninguém precisa falar em voz alta.')">OUVIR 🔊</button>
+            <button class="ctrlBtn ctrlBtnPrimary" type="button" onclick="finishMood()">CONCLUIR 1</button>
+          </div>
+          <div class="hint" id="msgMood">✅ Dica: escolha 1 ou 2.</div>
+
+          <hr style="border:none;border-top:2px dashed rgba(0,0,0,.2); margin:10px 0;">
+
+          <div class="cardTitle">2) JOGO — “BINGO DISCRETO DA IDENTIDADE”</div>
+          <p class="actText">
+            Clique para marcar as frases que combinam com você. Objetivo: marcar <b>3</b> (qualquer lugar).
+          </p>
+
+          <!-- ===== BINGO (interativo) ===== -->
+          <div class="bingo" aria-label="Bingo da identidade">
+            <div class="bCell" onclick="toggleBingo(this)">Gosto de aprender vendo exemplos</div>
+            <div class="bCell" onclick="toggleBingo(this)">Sou melhor quando tenho rotina</div>
+            <div class="bCell" onclick="toggleBingo(this)">Tenho um hobby (mesmo simples)</div>
+
+            <div class="bCell" onclick="toggleBingo(this)">Prefiro trabalhar em dupla</div>
+            <div class="bCell" onclick="toggleBingo(this)">Eu ajudo alguém em casa</div>
+            <div class="bCell" onclick="toggleBingo(this)">Tenho uma música que me representa</div>
+
+            <div class="bCell" onclick="toggleBingo(this)">Eu valorizo respeito</div>
+            <div class="bCell" onclick="toggleBingo(this)">Quero melhorar em algo este ano</div>
+            <div class="bCell" onclick="toggleBingo(this)">Tenho alguém que me inspira</div>
+          </div>
+
+          <div class="controls">
+            <button class="ctrlBtn" type="button" onclick="speakPT('Clique para marcar. Ninguém precisa mostrar.')">OUVIR 🔊</button>
+            <button class="ctrlBtn ctrlBtnPrimary" type="button" onclick="finishBingo()">CONCLUIR 2</button>
+          </div>
+          <div class="hint" id="msgBingo">✅ Marque 3 frases.</div>
+
+          <hr style="border:none;border-top:2px dashed rgba(0,0,0,.2); margin:10px 0;">
+
+          <div class="cardTitle">3) SOPA DE LETRAS — “PALAVRAS QUE ME DEFINEM”</div>
+          <p class="actText">
+            Lógica igual: encontre no quadro e depois selecione <b>2</b> palavras que combinam com você hoje.
+            (Aqui você seleciona clicando nas palavras.)
+          </p>
+
+          <!-- ===== “quadro” simplificado (visual) ===== -->
+          <div class="hint" style="margin-top:6px;">
+            RESPEITO • AMIGO • FORTE • SINCERO • CALMO
+          </div>
+
+          <!-- ===== WordBank (interativo) ===== -->
+          <div class="wordBank" aria-label="Palavras para selecionar">
+            <div class="wbItem" onclick="pickWord(this,'RESPEITO')">RESPEITO</div>
+            <div class="wbItem" onclick="pickWord(this,'AMIGO')">AMIGO</div>
+            <div class="wbItem" onclick="pickWord(this,'FORTE')">FORTE</div>
+            <div class="wbItem" onclick="pickWord(this,'SINCERO')">SINCERO</div>
+            <div class="wbItem" onclick="pickWord(this,'CALMO')">CALMO</div>
+          </div>
+
+          <div class="pickRow" aria-label="Minhas duas palavras">
+            <div class="pickBox">Palavra 1: <span id="pick1">—</span></div>
+            <div class="pickBox">Palavra 2: <span id="pick2">—</span></div>
+          </div>
+
+          <div class="controls">
+            <button class="ctrlBtn" type="button" onclick="speakPT('Escolha duas palavras que combinam com você hoje.')">OUVIR 🔊</button>
+            <button class="ctrlBtn ctrlBtnPrimary" type="button" onclick="finishWords()">CONCLUIR 3</button>
+          </div>
+          <div class="hint" id="msgWords">✅ Selecione 2 palavras.</div>
+        </div>
+
+        <!-- =====================================================
+             COLUNA DIREITA — ATIVIDADES 4 e 5 (resposta + checklist)
+        ====================================================== -->
+        <div class="card">
+          <div class="cardTitle">4) EU & MEUS GRUPOS (IDENTIDADE SOCIAL)</div>
+          <p class="actText">
+            Clique para marcar os grupos que fazem parte da sua vida <b>hoje</b>.
+            Depois responda uma frase curta (sem detalhes pessoais).
+          </p>
+
+          <!-- ===== CHECKLIST (interativo) ===== -->
+          <div class="checklist" aria-label="Checklist de grupos">
+            <div class="checkRow"><div class="boxCheck" onclick="toggleCheck(this)"></div><div>Família (convivo com)</div></div>
+            <div class="checkRow"><div class="boxCheck" onclick="toggleCheck(this)"></div><div>Escola (turma / professores / colegas)</div></div>
+            <div class="checkRow"><div class="boxCheck" onclick="toggleCheck(this)"></div><div>Amigos(as) / colegas de confiança</div></div>
+            <div class="checkRow"><div class="boxCheck" onclick="toggleCheck(this)"></div><div>Comunidade (bairro / grupo social)</div></div>
+            <div class="checkRow"><div class="boxCheck" onclick="toggleCheck(this)"></div><div>Internet (jogos / redes / comunidades)</div></div>
+            <div class="checkRow"><div class="boxCheck" onclick="toggleCheck(this)"></div><div>Trabalho / curso / atividade fora</div></div>
+            <div class="checkRow"><div class="boxCheck" onclick="toggleCheck(this)"></div><div>Esporte / arte / hobby</div></div>
+          </div>
+
+          <!-- ===== Resposta curta (sem vergonha) ===== -->
+          <div class="answers" aria-label="Resposta curta sobre um grupo">
+            <div id="boxG1">
+              <div class="ansRow">
+                <button class="tag" type="button" onclick="openInfo('Dica rápida', 'Você pode escrever algo simples como: respeitoso, calmo, esforçado, amigo, responsável. Não precisa dar detalhes.', true)">DICA 🔊</button>
+                <input id="inpG1" class="answerInput" autocomplete="off" placeholder="Neste grupo, eu sou visto(a) como alguém: ________">
+                <button class="answerBtn" type="button" onclick="checkGroupText()">OK</button>
+              </div>
+              <div class="answerMsg" id="msgG1"></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="ctrlBtn" type="button" onclick="speakPT('Marque alguns grupos e escreva uma frase curta. Você não precisa se expor.')">OUVIR 🔊</button>
+            <button class="ctrlBtn ctrlBtnPrimary" type="button" onclick="finishGroups()">CONCLUIR 4</button>
+          </div>
+          <div class="hint" id="msgGroups">✅ Marque pelo menos 1 grupo e escreva algo curto.</div>
+
+          <hr style="border:none;border-top:2px dashed rgba(0,0,0,.2); margin:10px 0;">
+
+          <div class="cardTitle">5) FECHAMENTO — “UM PASSO PEQUENO”</div>
+          <p class="actText">
+            Para fortalecer minha identidade (pessoal e social), eu escolho <b>1</b> passo pequeno esta semana:
+          </p>
+
+          <!-- ===== escolhas (interativo) ===== -->
+          <div class="chips" aria-label="Passos pequenos">
+            <button class="chipBtn" type="button" onclick="chooseStep(this,'sono')">Dormir melhor</button>
+            <button class="chipBtn" type="button" onclick="chooseStep(this,'estudo')">10 min de estudo</button>
+            <button class="chipBtn" type="button" onclick="chooseStep(this,'confianca')">Falar com alguém</button>
+            <button class="chipBtn" type="button" onclick="chooseStep(this,'hobby')">Praticar um hobby</button>
+            <button class="chipBtn" type="button" onclick="chooseStep(this,'calma')">Evitar briga</button>
+            <button class="chipBtn" type="button" onclick="chooseStep(this,'outro')">Outro</button>
+          </div>
+
+          <div class="answers">
+            <div id="boxS1">
+              <div class="ansRow">
+                <button class="tag" type="button" onclick="speakPT('Se você escolheu outro, escreva uma palavra simples. Exemplo: caminhar, ler, ajudar, treinar, organizar.')">OUVIR 🔊</button>
+                <input id="inpS1" class="answerInput" autocomplete="off" placeholder="Se escolheu 'Outro', escreva aqui (opcional)">
+                <button class="answerBtn" type="button" onclick="checkStepText()">OK</button>
+              </div>
+              <div class="answerMsg" id="msgS1"></div>
+            </div>
+          </div>
+
+          <div class="controls">
+            <button class="ctrlBtn" type="button" onclick="speakPT('Escolha um passo pequeno. Isso já é suficiente.')">OUVIR 🔊</button>
+            <button class="ctrlBtn ctrlBtnPrimary" type="button" onclick="finishStep()">CONCLUIR 5</button>
+          </div>
+          <div class="hint" id="msgStep">✅ Escolha 1 passo.</div>
+
+          <!-- FINALIZAR (só libera quando concluir tudo) -->
+          <div class="controls" style="margin-top:10px;">
+            <button class="ctrlBtn" type="button" onclick="resetAll()">REINICIAR</button>
+            <button class="ctrlBtn ctrlBtnPrimary" id="btnFinishAll" type="button" onclick="finishAll()" disabled>
+              FINALIZAR E GERAR CERTIFICADO
+            </button>
+          </div>
+          <div class="hint" id="msgFinish">Complete 5/5 para liberar o certificado.</div>
+
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+/* =========================================================
+   ✅ JS — PADRÃO AULA 4/5
+   - Registro do aluno (libera o wrap)
+   - Narrador (speechSynthesis)
+   - Interatividade + progresso + certificado automático
+========================================================= */
+
+/* =========================
+   1) ESTADO GLOBAL
+========================= */
+const state = {
+  student: { name:"", turma:"", escola:"" },
+  done: { a1:false, a2:false, a3:false, a4:false, a5:false }, // 5 atividades
+  mood: new Set(),                 // até 2
+  bingoMarked: 0,                  // marcar 3
+  pickedWords: [],                 // 2 palavras
+  groupsChecked: 0,                // >=1
+  groupTextOK: false,              // texto curto
+  stepChoice: "",                  // 1 passo
+  stepTextOK: true,                // opcional (só valida se escolher "outro")
+};
+
+let lastOverlaySpeech = "";
+
+/* =========================
+   2) REGISTRO (igual padrão)
+========================= */
+function saveStudent(){
+  const name = (document.getElementById("studentName").value || "").trim();
+  const turma = (document.getElementById("studentClass").value || "").trim();
+  const escola = (document.getElementById("studentSchool").value || "").trim();
+
+  if(!name || !turma || !escola){
+    alert("Preencha NOME, TURMA e ESCOLA.");
+    return;
+  }
+
+  state.student = { name, turma, escola };
+
+  // some registro e mostra wrap
+  document.getElementById("studentRegister").style.display = "none";
+  document.getElementById("wrap").style.display = "flex";
+
+  // fala uma mensagem curta (opcional)
+  speakPT("Bem-vindo. Vamos fazer as atividades com calma. Ninguém precisa se expor.");
+
+  updateProgress();
+}
+
+/* =========================
+   3) NARRADOR (PT-BR)
+========================= */
+function speakPT(text){
+  stopVoice();
+  if(!("speechSynthesis" in window)) return;
+
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = "pt-BR";
+  u.rate = 1.0;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+  window.speechSynthesis.speak(u);
+}
+
+function stopVoice(){
+  try{ window.speechSynthesis.cancel(); }catch(e){}
+}
+
+/* =========================
+   4) OVERLAY (central 2 colunas)
+========================= */
+function openInfo(title, text, speak){
+  document.getElementById("infoTitle").textContent = title;
+  document.getElementById("infoText").textContent = text;
+  document.getElementById("infoOverlay").style.display = "flex";
+  lastOverlaySpeech = text;
+  if(speak) speakPT(text);
+}
+function closeOverlay(){
+  document.getElementById("infoOverlay").style.display = "none";
+}
+function repeatOverlay(){
+  if(lastOverlaySpeech) speakPT(lastOverlaySpeech);
+}
+
+function getIdentityText(){
+  return "Identidade pessoal é como eu me vejo: minhas qualidades, meus gostos, meu jeito. " +
+         "Identidade social é como eu participo de grupos: família, escola, amigos, comunidade e internet. " +
+         "Hoje você só vai marcar e escrever pouco. Sem exposição.";
+}
+
+/* =========================
+   5) ATIVIDADE 1 — HUMOR (até 2)
+   (mesma lógica: escolher até 2)
+========================= */
+function toggleMood(btn, key){
+  // se já ativo, desativa
+  if(btn.classList.contains("active")){
+    btn.classList.remove("active");
+    state.mood.delete(key);
+    return;
+  }
+
+  // se já tem 2, não deixa marcar mais
+  if(state.mood.size >= 2){
+    speakPT("Escolha no máximo duas opções.");
+    return;
+  }
+
+  btn.classList.add("active");
+  state.mood.add(key);
+}
+
+function finishMood(){
+  const msg = document.getElementById("msgMood");
+  if(state.mood.size < 1){
+    msg.textContent = "❌ Escolha pelo menos 1 opção.";
+    msg.style.color = "var(--red)";
+    speakPT("Escolha pelo menos uma opção.");
+    return;
+  }
+
+  state.done.a1 = true;
+  msg.textContent = "✅ Concluído!";
+  msg.style.color = "var(--green)";
+  speakPT("Atividade 1 concluída.");
+  updateProgress();
+}
+
+/* =========================
+   6) ATIVIDADE 2 — BINGO (marcar 3)
+   (mesma lógica: marcar frases)
+========================= */
+function toggleBingo(cell){
+  cell.classList.toggle("marked");
+  state.bingoMarked = document.querySelectorAll(".bCell.marked").length;
+}
+
+function finishBingo(){
+  const msg = document.getElementById("msgBingo");
+  if(state.bingoMarked < 3){
+    msg.textContent = `❌ Você marcou ${state.bingoMarked}. Marque 3.`;
+    msg.style.color = "var(--red)";
+    speakPT("Marque três frases.");
+    return;
+  }
+
+  state.done.a2 = true;
+  msg.textContent = "✅ Concluído!";
+  msg.style.color = "var(--green)";
+  speakPT("Atividade 2 concluída.");
+  updateProgress();
+}
+
+/* =========================
+   7) ATIVIDADE 3 — “SOPA” (selecionar 2 palavras)
+   (mesma lógica: achar e marcar 2 palavras)
+========================= */
+function pickWord(el, word){
+  // se já ativo, desativa
+  if(el.classList.contains("active")){
+    el.classList.remove("active");
+    state.pickedWords = state.pickedWords.filter(w => w !== word);
+    renderPicked();
+    return;
+  }
+
+  // só 2
+  if(state.pickedWords.length >= 2){
+    speakPT("Escolha apenas duas palavras.");
+    return;
+  }
+
+  el.classList.add("active");
+  state.pickedWords.push(word);
+  renderPicked();
+}
+
+function renderPicked(){
+  document.getElementById("pick1").textContent = state.pickedWords[0] || "—";
+  document.getElementById("pick2").textContent = state.pickedWords[1] || "—";
+}
+
+function finishWords(){
+  const msg = document.getElementById("msgWords");
+  if(state.pickedWords.length !== 2){
+    msg.textContent = "❌ Selecione 2 palavras.";
+    msg.style.color = "var(--red)";
+    speakPT("Escolha duas palavras.");
+    return;
+  }
+
+  state.done.a3 = true;
+  msg.textContent = "✅ Concluído!";
+  msg.style.color = "var(--green)";
+  speakPT("Atividade 3 concluída.");
+  updateProgress();
+}
+
+/* =========================
+   8) ATIVIDADE 4 — GRUPOS (>=1) + texto curto
+   (mesma lógica: checklist + frase simples)
+========================= */
+function toggleCheck(box){
+  box.classList.toggle("checked");
+  state.groupsChecked = document.querySelectorAll(".boxCheck.checked").length;
+}
+
+function checkGroupText(){
+  const v = (document.getElementById("inpG1").value || "").trim();
+  const msg = document.getElementById("msgG1");
+
+  if(v.length < 3){
+    state.groupTextOK = false;
+    msg.textContent = "❌ Escreva pelo menos 1 palavra (ex.: calmo, amigo, respeitoso).";
+    msg.style.color = "var(--red)";
+    speakPT("Escreva uma palavra simples.");
+    return;
+  }
+
+  state.groupTextOK = true;
+  msg.textContent = "✅ OK!";
+  msg.style.color = "var(--green)";
+  speakPT("Tudo certo.");
+}
+
+function finishGroups(){
+  const msg = document.getElementById("msgGroups");
+
+  // garante que a validação do texto rodou
+  const v = (document.getElementById("inpG1").value || "").trim();
+  if(v.length >= 3) state.groupTextOK = true;
+
+  if(state.groupsChecked < 1 || !state.groupTextOK){
+    msg.textContent = "❌ Marque pelo menos 1 grupo e escreva algo curto.";
+    msg.style.color = "var(--red)";
+    speakPT("Marque um grupo e escreva uma palavra simples.");
+    return;
+  }
+
+  state.done.a4 = true;
+  msg.textContent = "✅ Concluído!";
+  msg.style.color = "var(--green)";
+  speakPT("Atividade 4 concluída.");
+  updateProgress();
+}
+
+/* =========================
+   9) ATIVIDADE 5 — PASSO PEQUENO (escolher 1)
+   (mesma lógica: escolher um passo + outro opcional)
+========================= */
+function chooseStep(btn, key){
+  // desativa todos
+  document.querySelectorAll("[aria-label='Passos pequenos'] .chipBtn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  state.stepChoice = key;
+
+  // se não for "outro", texto é opcional e fica ok
+  state.stepTextOK = (key !== "outro") ? true : false;
+}
+
+function checkStepText(){
+  const msg = document.getElementById("msgS1");
+  const v = (document.getElementById("inpS1").value || "").trim();
+
+  if(state.stepChoice !== "outro"){
+    msg.textContent = "✅ OK (opcional).";
+    msg.style.color = "var(--green)";
+    state.stepTextOK = true;
+    return;
+  }
+
+  if(v.length < 3){
+    msg.textContent = "❌ Escreva 1 palavra para o seu 'Outro'.";
+    msg.style.color = "var(--red)";
+    state.stepTextOK = false;
+    speakPT("Escreva uma palavra simples para o seu outro passo.");
+    return;
+  }
+
+  msg.textContent = "✅ OK!";
+  msg.style.color = "var(--green)";
+  state.stepTextOK = true;
+  speakPT("Tudo certo.");
+}
+
+function finishStep(){
+  const msg = document.getElementById("msgStep");
+
+  if(!state.stepChoice){
+    msg.textContent = "❌ Escolha 1 passo.";
+    msg.style.color = "var(--red)";
+    speakPT("Escolha um passo pequeno.");
+    return;
+  }
+
+  // se for "outro", exige texto mínimo
+  if(state.stepChoice === "outro"){
+    const v = (document.getElementById("inpS1").value || "").trim();
+    if(v.length < 3){
+      msg.textContent = "❌ Você escolheu 'Outro'. Escreva 1 palavra.";
+      msg.style.color = "var(--red)";
+      speakPT("Escreva uma palavra para o seu outro passo.");
+      return;
+    }
+    state.stepTextOK = true;
+  }
+
+  state.done.a5 = true;
+  msg.textContent = "✅ Concluído!";
+  msg.style.color = "var(--green)";
+  speakPT("Atividade 5 concluída.");
+  updateProgress();
+}
+
+/* =========================
+   10) PROGRESSO + LIBERA FINAL
+========================= */
+function updateProgress(){
+  const doneCount = Object.values(state.done).filter(Boolean).length;
+  const total = 5;
+
+  document.getElementById("progTxt").textContent = `${doneCount}/${total}`;
+  document.getElementById("progFill").style.width = `${(doneCount/total)*100}%`;
+
+  const btn = document.getElementById("btnFinishAll");
+  const msgFinish = document.getElementById("msgFinish");
+
+  if(doneCount === total){
+    btn.disabled = false;
+    msgFinish.textContent = "✅ Tudo pronto! Clique em FINALIZAR para gerar o certificado.";
+    msgFinish.style.color = "var(--green)";
+    document.getElementById("progHint").textContent = "Você concluiu todas as atividades. Certificado liberado!";
+  }else{
+    btn.disabled = true;
+    msgFinish.textContent = "Complete 5/5 para liberar o certificado.";
+    msgFinish.style.color = "#111";
+    document.getElementById("progHint").textContent = "Complete as atividades para receber o certificado.";
+  }
+}
+
+/* =========================
+   11) FINALIZAR + CERTIFICADO
+========================= */
+function finishAll(){
+  // segurança: só finaliza se completou tudo
+  const doneCount = Object.values(state.done).filter(Boolean).length;
+  if(doneCount !== 5){
+    speakPT("Ainda falta concluir algumas atividades.");
+    return;
+  }
+
+  showCertificate();
+}
+
+function showCertificate(){
+  // preenche dados
+  document.getElementById("certName").textContent = state.student.name.toUpperCase();
+  document.getElementById("certTurma").textContent = state.student.turma;
+  document.getElementById("certEscola").textContent = state.student.escola;
+
+  const now = new Date();
+  const dd = String(now.getDate()).padStart(2,"0");
+  const mm = String(now.getMonth()+1).padStart(2,"0");
+  const yyyy = now.getFullYear();
+  const hh = String(now.getHours()).padStart(2,"0");
+  const mi = String(now.getMinutes()).padStart(2,"0");
+
+  document.getElementById("certData").textContent = `${dd}/${mm}/${yyyy}`;
+  document.getElementById("certHora").textContent = `${hh}:${mi}`;
+
+  document.getElementById("certOverlay").style.display = "flex";
+  speakPT("Parabéns. Você concluiu a aula e recebeu seu certificado.");
+}
+
+function closeCertificate(){
+  document.getElementById("certOverlay").style.display = "none";
+}
+
+/* =========================
+   12) RESET (pra testar rápido)
+========================= */
+function resetAll(){
+  stopVoice();
+
+  // reset estado
+  state.done = { a1:false, a2:false, a3:false, a4:false, a5:false };
+  state.mood = new Set();
+  state.bingoMarked = 0;
+  state.pickedWords = [];
+  state.groupsChecked = 0;
+  state.groupTextOK = false;
+  state.stepChoice = "";
+  state.stepTextOK = true;
+
+  // reset UI (chips)
+  document.querySelectorAll(".chipBtn").forEach(b => b.classList.remove("active"));
+
+  // reset bingo
+  document.querySelectorAll(".bCell").forEach(c => c.classList.remove("marked"));
+
+  // reset word bank
+  document.querySelectorAll(".wbItem").forEach(w => w.classList.remove("active"));
+  renderPicked();
+
+  // reset checks
+  document.querySelectorAll(".boxCheck").forEach(b => b.classList.remove("checked"));
+
+  // reset inputs
+  document.getElementById("inpG1").value = "";
+  document.getElementById("inpS1").value = "";
+
+  // reset mensagens
+  setMsg("msgMood","✅ Dica: escolha 1 ou 2.", "#111");
+  setMsg("msgBingo","✅ Marque 3 frases.", "#111");
+  setMsg("msgWords","✅ Selecione 2 palavras.", "#111");
+  setMsg("msgGroups","✅ Marque pelo menos 1 grupo e escreva algo curto.", "#111");
+  setMsg("msgStep","✅ Escolha 1 passo.", "#111");
+  setMsg("msgFinish","Complete 5/5 para liberar o certificado.", "#111");
+
+  document.getElementById("msgG1").textContent = "";
+  document.getElementById("msgS1").textContent = "";
+
+  updateProgress();
+}
+
+function setMsg(id, txt, color){
+  const el = document.getElementById(id);
+  el.textContent = txt;
+  el.style.color = color;
+}
+
+/* =========================================================
+   ✅ BOOT: deixa progresso certo ao abrir
+========================================================= */
+updateProgress();
+</script>
+
+</body>
+</html>
