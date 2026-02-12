@@ -63,11 +63,14 @@ body{
   height:320mm;
   background: var(--paper);
   position:relative;
-  overflow:hidden;
   box-shadow: 0 10px 30px rgba(0,0,0,.18);
   display:block;
   margin: 0 auto;
+
+  /* REMOVA overflow:hidden */
+  overflow:visible;
 }
+
 
 /* =========================================================
    4) ÁREA ÚTIL (margens internas)
@@ -638,6 +641,41 @@ body{
   }
   @page{ size:A4 landscape; margin:0; }
 }
+/* =========================================================
+   🔎 MODO RESPONSIVO (iPhone / telas pequenas)
+========================================================= */
+@media (max-width: 900px){
+
+  body{
+    padding:0;
+  }
+
+  .page{
+    width:100%;
+    height:auto;
+    min-height:100vh;
+    border-radius:0;
+  }
+
+  .content{
+    position:relative;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+    padding:16px;
+  }
+
+  .cols{
+    grid-template-columns: 1fr; /* vira 1 coluna */
+  }
+
+}
+.lowVision{
+  font-size: 120%;
+  line-height: 1.6;
+}
+
 </style>
 </head>
 
@@ -712,6 +750,7 @@ body{
     </div>
   </div>
 </div>
+<button class="ctrlBtn" onclick="toggleLowVision()">BAIXA VISÃO 👁️</button>
 
 <!-- =====================================================
      ✅ WRAP — PÁGINAS (só aparece após registro)
@@ -1366,6 +1405,10 @@ function setMsg(id, txt, color){
    ✅ BOOT: deixa progresso certo ao abrir
 ========================================================= */
 updateProgress();
+function toggleLowVision(){
+  document.body.classList.toggle("lowVision");
+}
+
 </script>
 
 </body>
